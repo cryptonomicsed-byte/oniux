@@ -57,6 +57,10 @@ struct Args {
     /// Port to start a SOCKS server on inside oniux, 0 to disable
     #[arg(short = 'p', long, value_name = "PORT", default_value_t = 9050)]
     socks_port: u16,
+
+    /// Path to arti.toml configuration file
+    #[arg(short = 'c', long = "arti-config", value_name = "PATH")]
+    arti_config: Option<PathBuf>,
 }
 
 /// Generate an empty stack for calls to `clone(2)`
@@ -160,7 +164,11 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
 }
 
 /// Runs an onion-tunnel endlessly on the `tun` device.
-fn onion_tunnel(tun: OwnedFd, socks_listener: Option<StdTcpListener>) -> Result<()> {
+fn onion_tunnel(
+    tun: OwnedFd,
+    socks_listener: Option<StdTcpListener>,
+    arti_config: Option<PathBuf>,
+) -> Result<()> {
     Runtime::new()?.block_on(async move {
         let can_mark = LinuxScaffolding::can_mark();
         let scaffolding = LinuxScaffolding {
@@ -168,8 +176,11 @@ fn onion_tunnel(tun: OwnedFd, socks_listener: Option<StdTcpListener>) -> Result<
             cc: None,
             log_connections: false,
         };
-        let mut tunnel =
-            OnionTunnel::create_with_fd(scaffolding, tun, TunnelConfig::default()).await?;
+
+        let mut tunnel_config: TunnelConfig = Default::default();
+        tunnel_config.arti_cfg_path = arti_config;
+
+        let mut tunnel = OnionTunnel::create_with_fd(scaffolding, tun, tunnel_config).await?;
 
         let mut tasks = tokio::task::JoinSet::new();
         if let Some(std_listener) = socks_listener {
@@ -270,10 +281,12 @@ fn main_main(args: Args) -> Result<ExitCode> {
     // Maybe we could use `Runtime::spawn` instead, but spawning the task
     // ourselves in combinating with `Runtime::block_on` gives me a more fuzzy
     // feeling in terms of control.
-    thread::spawn(|| match onion_tunnel(tun, socks_listener) {
-        Ok(()) => {}
-        Err(e) => error!("{e}"),
-    });
+    thread::spawn(
+        || match onion_tunnel(tun, socks_listener, args.arti_config) {
+            Ok(()) => {}
+            Err(e) => error!("{e}"),
+        },
+    );
     debug!("spawned onion-tunnel thread");
 
     // Wait until the isolation process `proc` has finished and return its
