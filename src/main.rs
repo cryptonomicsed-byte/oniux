@@ -201,6 +201,11 @@ fn onion_tunnel(
 
 /// The actual main program.
 fn main_main(args: Args) -> Result<ExitCode> {
+    // Install the crypto provider.
+    if let Err(_) = rustls::crypto::aws_lc_rs::default_provider().install_default() {
+        bail!("CryptoProvider already installed?");
+    }
+
     if !std::path::Path::new("/dev/net/tun").exists() {
         bail!("tun kernel module not loaded");
     }
