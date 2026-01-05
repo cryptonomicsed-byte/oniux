@@ -4,8 +4,8 @@
 #![allow(clippy::unused_io_amount)]
 use std::{fs::File, io::Write};
 
-use log::debug;
 use nix::unistd::{Gid, Uid};
+use tracing::debug;
 
 #[derive(thiserror::Error, Debug)]
 pub enum UserError {

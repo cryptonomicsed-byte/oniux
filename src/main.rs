@@ -17,7 +17,6 @@ use std::{
 use anyhow::{bail, Context, Result};
 use caps::CapSet;
 use clap::Parser;
-use log::{debug, error, warn};
 use netlink_packet_route::AddressFamily;
 use nix::{
     libc,
@@ -32,6 +31,7 @@ use std::net::TcpListener as StdTcpListener;
 use tempfile::NamedTempFile;
 use tokio::net::TcpListener as TokioTcpListener;
 use tokio::runtime::Runtime;
+use tracing::{debug, error, level_filters::LevelFilter, warn};
 
 mod mount;
 mod netlink;
@@ -61,6 +61,10 @@ struct Args {
     /// Path to arti.toml configuration file
     #[arg(short = 'c', long = "arti-config", value_name = "PATH")]
     arti_config: Option<PathBuf>,
+
+    /// Log level to use (trace, debug, info, warn, error), default off
+    #[arg(short = 'l', long, value_name = "LEVEL")]
+    log: Option<LevelFilter>,
 }
 
 /// Generate an empty stack for calls to `clone(2)`
@@ -301,8 +305,15 @@ fn main_main(args: Args) -> Result<ExitCode> {
 /// Wrapper around [`main_main()`] to properly log errors.
 fn main() -> ExitCode {
     // Necessary steps before invocation of `main_main`.
-    env_logger::init();
     let args = Args::parse();
+    if let Some(level) = args.log {
+        // If disabled, we don't log anything because maybe someone wants a
+        // totally clean stderr.
+        tracing_subscriber::fmt()
+            .compact()
+            .with_max_level(level)
+            .init();
+    }
 
     match main_main(args) {
         Ok(code) => code,

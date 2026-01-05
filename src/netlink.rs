@@ -8,7 +8,6 @@
 
 use std::net::IpAddr;
 
-use log::debug;
 use netlink_packet_core::{
     ErrorMessage, NetlinkDeserializable, NetlinkHeader, NetlinkMessage, NetlinkPayload,
     NetlinkSerializable, NLM_F_ACK, NLM_F_CREATE, NLM_F_EXCL, NLM_F_REQUEST,
@@ -21,6 +20,7 @@ use netlink_packet_route::{
 };
 use netlink_sys::{protocols::NETLINK_ROUTE, Socket, SocketAddr};
 use thiserror::Error;
+use tracing::debug;
 
 const DEFAULT_BUF_SIZE: usize = 4096;
 

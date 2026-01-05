@@ -2,9 +2,9 @@
 
 use std::path::Path;
 
-use log::debug;
 use nix::mount::{self, MsFlags};
 use thiserror::Error;
+use tracing::debug;
 
 #[derive(Error, Debug)]
 pub enum MountError {
