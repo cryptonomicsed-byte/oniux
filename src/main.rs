@@ -171,11 +171,7 @@ fn onion_tunnel(
 ) -> Result<()> {
     Runtime::new()?.block_on(async move {
         let can_mark = LinuxScaffolding::can_mark();
-        let scaffolding = LinuxScaffolding {
-            can_mark,
-            cc: None,
-            log_connections: false,
-        };
+        let scaffolding = LinuxScaffolding { can_mark, cc: None };
 
         let mut tunnel_config: TunnelConfig = Default::default();
         tunnel_config.arti_cfg_path = arti_config;
@@ -188,7 +184,7 @@ fn onion_tunnel(
             std_listener.set_nonblocking(true)?;
             let tokio_listener = TokioTcpListener::from_std(std_listener)?;
             let listener = tokio_listener.into();
-            tasks.spawn(arti::socks::run_socks_proxy_with_listeners(
+            tasks.spawn(arti::proxy::run_proxy_with_listeners(
                 tunnel.get_tor_client(),
                 vec![listener],
                 None,
