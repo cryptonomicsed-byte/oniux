@@ -9,7 +9,7 @@ rust-clippy:
   allow_failure: true
   script:
     - rustup component add clippy
-    - cargo clippy
+    - cargo clippy -- -D warnings
 
 cargo-fmt:
   stage: check
