@@ -1,3 +1,14 @@
+# oniux 0.7.0 - 14 January 2026
+
+* Update various dependencies, including Arti 1.9.0.
+* Support for Arti configurations using `-c`, which includes the possibility
+  to use bridges with oniux.
+* Use `localhost:9050` in the `ALL_PROXY` environment variable now.
+    * Fixes a bug where one could not resolve addresses using curl.
+* Implement logging using `tracing` and adding `-l` for setting a log level.
+    * This deprecates the `RUST_LOG` environment variable.
+* Add an example for anticenorship using `-c`.
+
 # oniux 0.6.1 - 04 September 2025
 
 * Updates various crates to their newest, this most notably includes Arti 1.5.0
