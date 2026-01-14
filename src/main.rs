@@ -24,7 +24,7 @@ use nix::{
     sys::wait::{self, WaitStatus},
     unistd::{self, Gid, Uid},
 };
-use onion_tunnel::{config::TunnelConfig, scaffolding::LinuxScaffolding, OnionTunnel};
+use onion_tunnel::{config::TunnelConfig, scaffolding::linux::LinuxScaffolding, OnionTunnel};
 use sendfd::{RecvWithFd, SendWithFd};
 use smoltcp::phy::{Medium, TunTapInterface};
 use std::net::TcpListener as StdTcpListener;
