@@ -161,7 +161,10 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
         }
     }
     if args.socks_port != 0 {
-        command.env("ALL_PROXY", format!("socks5h://[::1]:{}", args.socks_port));
+        command.env(
+            "ALL_PROXY",
+            format!("socks5h://localhost:{}", args.socks_port),
+        );
     }
     let mut child = command.spawn().context("failed to spawn command")?;
     Ok(child.wait()?)
