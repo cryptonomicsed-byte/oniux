@@ -13,7 +13,7 @@ use std::{
     time::Duration,
 };
 
-use anyhow::{bail, Context, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use caps::CapSet;
 use clap::Parser;
 use netlink_packet_route::AddressFamily;
@@ -264,22 +264,33 @@ fn main_main(args: Args) -> Result<ExitCode> {
     drop(parent);
 
     // Receive file descriptor.
-    let mut fds = [-1, -1];
+    let mut fds = [-1; 2];
     let (_, nfds) = child.recv_with_fd(&mut [0; 1024], &mut fds)?;
-    assert_ne!(fds[0], -1);
-    let socks_listener = if nfds == 2 {
-        assert_ne!(fds[1], -1);
-        let std_listener = unsafe { StdTcpListener::from_raw_fd(fds[1]) };
-        // we don't convert to a TokioTcpListener here because we need to be inside a tokio runtime
-        // to do so
-        Some(std_listener)
-    } else {
-        assert_eq!(nfds, 1);
-        None
-    };
-    let tun = unsafe { OwnedFd::from_raw_fd(fds[0]) };
     debug!("received file descriptors from child");
     drop(child);
+    let fds = &fds[..nfds];
+
+    // Precautionary check, probably not necessary but still.
+    if fds.iter().any(|fd| *fd == -1) {
+        bail!("received invalid file descriptor");
+    }
+
+    // Convert the TUN fd to something owned.
+    let tun = unsafe {
+        OwnedFd::from_raw_fd(
+            *fds.get(0)
+                .ok_or(anyhow!("received no TUN descriptor from child"))?,
+        )
+    };
+    debug!("acknowledged TUN descriptor from child");
+
+    // Convert the SOCKS fd to something owned.
+    let socks_listener = fds.get(1).map(|fd| unsafe {
+        // We don't convert to a TokioTcpListener here because we need to be
+        // inside a Tokio runtime to do so.
+        StdTcpListener::from_raw_fd(*fd)
+    });
+    debug!("acknowledged SOCKS descriptor from child");
 
     // Spawn task to handle the TUN device in.
     // Maybe we could use `Runtime::spawn` instead, but spawning the task
