@@ -2,7 +2,10 @@
 //!
 //! All functions require a working procfs mount at `/proc`.
 #![allow(clippy::unused_io_amount)]
-use std::{fs::File, io::Write};
+use std::{
+    fs::File,
+    io::{Read, Write},
+};
 
 use nix::unistd::{Gid, Uid};
 use tracing::debug;
@@ -11,6 +14,22 @@ use tracing::debug;
 pub enum UserError {
     #[error("I/O error: {0}")]
     IO(#[from] std::io::Error),
+}
+
+/// Checks whether user namespaces are usable for us.
+pub fn usable() -> bool {
+    if Uid::is_root(Uid::effective()) {
+        true
+    } else {
+        let res = File::open("/proc/sys/kernel/unprivileged_userns_clone").and_then(|mut f| {
+            let mut s = String::new();
+            f.read_to_string(&mut s)?;
+            s = s.trim().to_owned();
+            Ok(s)
+        });
+
+        matches!(res.as_ref().map(|s| s.as_str()), Ok("1"))
+    }
 }
 
 /// Performs a 1-by-1 mapping of two [`Uid`]'s.
