@@ -9,8 +9,8 @@ use std::{
     },
     path::PathBuf,
     process::{Command, ExitCode, ExitStatus},
+    sync::{Arc, Once},
     thread,
-    time::Duration,
 };
 
 use anyhow::{anyhow, bail, Context, Result};
@@ -141,12 +141,9 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
     drop(tun);
     drop(socks_listener);
 
-    // The 100ms is a rather arbitrary timeout, but it probably does not hurt
-    // to wait until the parent has received the file descriptors and launched
-    // the onion-tunnel thread.
-    // TODO: Consider using IPC here to indicate that we can continue although
-    // that might be a little bit overkill.
-    thread::sleep(Duration::from_millis(100));
+    debug!("waiting for parent to mark us as ready");
+    let _ = parent.recv(&mut [])?;
+    debug!("parent marked us as ready");
 
     // Run the actual child and wait for its termination.
     // It is important to not use something like `execve` or anything that else
@@ -172,6 +169,7 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
 
 /// Runs an onion-tunnel endlessly on the `tun` device.
 fn onion_tunnel(
+    ready: Arc<Once>,
     tun: OwnedFd,
     socks_listener: Option<StdTcpListener>,
     arti_config: Option<PathBuf>,
@@ -198,6 +196,9 @@ fn onion_tunnel(
             ));
         }
         tasks.spawn(async move { tunnel.run().await.context("tunnel died") });
+        // TODO: Add a clean way to onionmasq for doing that.
+        ready.call_once(|| ());
+        debug!("marked onion tunnel as ready");
         while let Some(task_res) = tasks.join_next().await {
             task_res??;
         }
@@ -268,18 +269,17 @@ fn main_main(args: Args) -> Result<ExitCode> {
     let mut fds = [-1; 2];
     let (_, nfds) = child.recv_with_fd(&mut [0; 1024], &mut fds)?;
     debug!("received file descriptors from child");
-    drop(child);
     let fds = &fds[..nfds];
 
     // Precautionary check, probably not necessary but still.
-    if fds.iter().any(|fd| *fd == -1) {
+    if fds.contains(&-1) {
         bail!("received invalid file descriptor");
     }
 
     // Convert the TUN fd to something owned.
     let tun = unsafe {
         OwnedFd::from_raw_fd(
-            *fds.get(0)
+            *fds.first()
                 .ok_or(anyhow!("received no TUN descriptor from child"))?,
         )
     };
@@ -297,13 +297,22 @@ fn main_main(args: Args) -> Result<ExitCode> {
     // Maybe we could use `Runtime::spawn` instead, but spawning the task
     // ourselves in combinating with `Runtime::block_on` gives me a more fuzzy
     // feeling in terms of control.
-    thread::spawn(
-        || match onion_tunnel(tun, socks_listener, args.arti_config) {
+    let ready = Arc::new(Once::new());
+    thread::spawn({
+        let ready = ready.clone();
+        move || match onion_tunnel(ready, tun, socks_listener, args.arti_config) {
             Ok(()) => {}
             Err(e) => error!("onion-tunnel is dead? {e}"),
-        },
-    );
-    debug!("spawned onion-tunnel thread");
+        }
+    });
+
+    debug!("waiting for onion tunnel to become ready");
+    ready.wait();
+    debug!("onion tunnel was marked as ready");
+
+    child.send(&[])?;
+    drop(child);
+    debug!("marked child as ready");
 
     // Wait until the isolation process `proc` has finished and return its
     // status as an `ExitCode`.
