@@ -45,6 +45,7 @@ const LOOPBACK_DEVICE: &str = "lo";
 /// The name of the TUN device
 const DEVICE_NAME: &str = "onion0";
 
+/// The environment variables that will be overwritten by oniux.
 const IGNORED_ENV_VAR: &[&str] = &["ALL_PROXY", "NO_PROXY", "all_proxy", "no_proxy"];
 
 #[derive(Parser, Debug)]
