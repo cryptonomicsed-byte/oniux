@@ -136,9 +136,9 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
         None
     };
     parent.send_with_fd(&[0; 1024], &fds_to_send)?;
+    debug!("sent file descriptors to parent");
     drop(tun);
     drop(socks_listener);
-    debug!("sent TUN device");
 
     // The 100ms is a rather arbitrary timeout, but it probably does not hurt
     // to wait until the parent has received the file descriptor and launched
@@ -278,7 +278,8 @@ fn main_main(args: Args) -> Result<ExitCode> {
         None
     };
     let tun = unsafe { OwnedFd::from_raw_fd(fds[0]) };
-    debug!("received TUN file descriptor");
+    debug!("received file descriptors from child");
+    drop(child);
 
     // Spawn task to handle the TUN device in.
     // Maybe we could use `Runtime::spawn` instead, but spawning the task
