@@ -300,7 +300,7 @@ fn main_main(args: Args) -> Result<ExitCode> {
     thread::spawn(
         || match onion_tunnel(tun, socks_listener, args.arti_config) {
             Ok(()) => {}
-            Err(e) => error!("{e}"),
+            Err(e) => error!("onion-tunnel is dead? {e}"),
         },
     );
     debug!("spawned onion-tunnel thread");
