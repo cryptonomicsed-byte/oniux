@@ -141,7 +141,7 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
     drop(socks_listener);
 
     // The 100ms is a rather arbitrary timeout, but it probably does not hurt
-    // to wait until the parent has received the file descriptor and launched
+    // to wait until the parent has received the file descriptors and launched
     // the onion-tunnel thread.
     // TODO: Consider using IPC here to indicate that we can continue although
     // that might be a little bit overkill.
@@ -263,7 +263,7 @@ fn main_main(args: Args) -> Result<ExitCode> {
     }?;
     drop(parent);
 
-    // Receive file descriptor.
+    // Receive file descriptors.
     let mut fds = [-1; 2];
     let (_, nfds) = child.recv_with_fd(&mut [0; 1024], &mut fds)?;
     debug!("received file descriptors from child");
