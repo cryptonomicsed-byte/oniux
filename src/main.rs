@@ -272,14 +272,14 @@ fn main_main(args: Args) -> Result<ExitCode> {
     let fds = &fds[..nfds];
 
     // Precautionary check, probably not necessary but still.
-    if fds.iter().any(|fd| *fd == -1) {
+    if fds.contains(&-1) {
         bail!("received invalid file descriptor");
     }
 
     // Convert the TUN fd to something owned.
     let tun = unsafe {
         OwnedFd::from_raw_fd(
-            *fds.get(0)
+            *fds.first()
                 .ok_or(anyhow!("received no TUN descriptor from child"))?,
         )
     };
