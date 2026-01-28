@@ -1,8 +1,7 @@
 #![deny(clippy::unwrap_used)]
 #![deny(clippy::expect_used)]
 use std::{
-    fs::File,
-    io::{Read, Write},
+    io::Write,
     net::{IpAddr, Ipv4Addr, Ipv6Addr},
     os::{
         fd::{AsRawFd, FromRawFd, OwnedFd},
@@ -22,7 +21,7 @@ use nix::{
     libc,
     sched::{self, CloneFlags},
     sys::wait::{self, WaitStatus},
-    unistd::{self, Gid, Uid},
+    unistd::{Gid, Uid},
 };
 use onion_tunnel::{config::TunnelConfig, scaffolding::linux::LinuxScaffolding, OnionTunnel};
 use sendfd::{RecvWithFd, SendWithFd};
@@ -220,15 +219,8 @@ fn main_main(args: Args) -> Result<ExitCode> {
         bail!("tun kernel module not loaded");
     }
 
-    // Check whether we can create user namespaces if we are unprivileged.
-    if !Uid::is_root(unistd::geteuid()) {
-        if let Ok(mut f) = File::open("/proc/sys/kernel/unprivileged_userns_clone") {
-            let mut buf = String::new();
-            f.read_to_string(&mut buf)?;
-            if buf.trim() != "1" {
-                bail!("no privileges to create userns, consider `sudo sysctl kernel.unprivileged_userns_clone=1`");
-            }
-        }
+    if !user::usable() {
+        bail!("user namespaces not usable");
     }
 
     // Create IPC primitives.
