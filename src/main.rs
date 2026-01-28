@@ -62,9 +62,9 @@ struct Args {
     #[arg(short = 'c', long = "arti-config", value_name = "PATH")]
     arti_config: Option<PathBuf>,
 
-    /// Log level to use (trace, debug, info, warn, error), default off
-    #[arg(short = 'l', long, value_name = "LEVEL")]
-    log: Option<LevelFilter>,
+    /// Log level to use (trace, debug, info, warn, error, off), default error
+    #[arg(short = 'l', long, value_name = "LEVEL", default_value_t = LevelFilter::ERROR)]
+    log: LevelFilter,
 }
 
 /// Generate an empty stack for calls to `clone(2)`
@@ -312,14 +312,10 @@ fn main_main(args: Args) -> Result<ExitCode> {
 fn main() -> ExitCode {
     // Necessary steps before invocation of `main_main`.
     let args = Args::parse();
-    if let Some(level) = args.log {
-        // If disabled, we don't log anything because maybe someone wants a
-        // totally clean stderr.
-        tracing_subscriber::fmt()
-            .compact()
-            .with_max_level(level)
-            .init();
-    }
+    tracing_subscriber::fmt()
+        .compact()
+        .with_max_level(args.log)
+        .init();
 
     match main_main(args) {
         Ok(code) => code,
