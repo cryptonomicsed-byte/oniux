@@ -3,14 +3,7 @@
 use std::path::Path;
 
 use nix::mount::{self, MsFlags};
-use thiserror::Error;
 use tracing::debug;
-
-#[derive(Error, Debug)]
-pub enum MountError {
-    #[error("failed to mount: {0}")]
-    Internal(#[from] nix::errno::Errno),
-}
 
 /// Initialize a freshly created mount namespace.
 ///
@@ -20,7 +13,7 @@ pub enum MountError {
 /// in case that there is a shared subtree somewhere within the file system.
 /// If `/` is already marked with [`MsFlags::MS_REC`], then this is a rather
 /// redundant operation but honestly it probably never hurts to do it again.
-pub fn init_namespace() -> Result<(), MountError> {
+pub fn init_namespace() -> Result<(), nix::errno::Errno> {
     mount::mount(
         Some(""),
         "/",
@@ -34,7 +27,7 @@ pub fn init_namespace() -> Result<(), MountError> {
 }
 
 /// Mounts `procfs` at `path`.
-pub fn procfs(path: &Path) -> Result<(), MountError> {
+pub fn procfs(path: &Path) -> Result<(), nix::errno::Errno> {
     mount::mount(Some("proc"), path, Some("proc"), MsFlags::empty(), Some(""))?;
     debug!("mounted `procfs` at `{:?}`", path);
 
@@ -42,7 +35,7 @@ pub fn procfs(path: &Path) -> Result<(), MountError> {
 }
 
 /// Creates a [`MsFlags::MS_BIND`] mount between `src` and `dst`.
-pub fn bind(src: &Path, dst: &Path) -> Result<(), MountError> {
+pub fn bind(src: &Path, dst: &Path) -> Result<(), nix::errno::Errno> {
     mount::mount(Some(src), dst, Some(""), MsFlags::MS_BIND, Some(""))?;
     debug!("created bind mount {:?} -> {:?}", src, dst);
 
