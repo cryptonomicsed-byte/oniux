@@ -20,4 +20,4 @@ cargo-fmt:
 rust-latest:
   stage: build
   script:
-    - cargo build --release
+    - cargo build
