@@ -16,7 +16,7 @@ offers a TUN device to send Tor traffic through.
 
 ```sh
 cargo build --release
-./target/release/oniux curl https://check.torproject.org
+./target/release/oniux curl https://check.torproject.org/api/ip
 ```
 
 Running *oniux* will require the `tun` kernel module.  Usually, it should be
