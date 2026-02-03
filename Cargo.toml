@@ -19,7 +19,7 @@ nix = { version = "0.31.0", features = ["sched", "process", "fs", "mount", "user
 onion-tunnel = { git = "https://gitlab.torproject.org/tpo/core/onionmasq.git" }
 arti = { version = "2.0.0" , features = ["experimental-api"]}
 sendfd = "0.4.4"
-smoltcp = { git = "https://github.com/smoltcp-rs/smoltcp.git" }
+smoltcp = { git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "39cd44e585aae109f37a2bc9f31376414968456d" }
 tempfile = "3.21.0"
 tokio = { version = "1.47.1", features = ["full"] }
 thiserror = "2.0.16"
