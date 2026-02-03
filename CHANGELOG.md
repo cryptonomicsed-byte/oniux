@@ -1,3 +1,16 @@
+# oniux 0.8.0 - 03 February 2026
+
+* Update various dependencies, including Arti 2.0.0.
+    * Arti 2.0 has a breaking configuration syntax change, meaning that your
+      Arti configuration may need updates.
+* Log errors by default.
+* Improve checks for availability of user namespaces.
+* Improve internal error handling.
+* Refactor FD send/recv logic.
+* Log the unlikely death of an onion-tunnel.
+* Refactor IPC sync logic for readiness.
+* Update example in README
+
 # oniux 0.7.0 - 14 January 2026
 
 * Update various dependencies, including Arti 1.9.0.
