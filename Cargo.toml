@@ -9,21 +9,21 @@ keywords = ["tor", "arti", "privacy", "anonymity"]
 categories = ["command-line-utilities", "cryptography"]
 
 [dependencies]
-anyhow = "1.0.99"
-caps = "0.5.5"
-clap = { version = "4.5.47", features = ["derive"] }
-netlink-packet-core = "0.8.0"
+anyhow = "1.0.100"
+caps = "0.5.6"
+clap = { version = "4.5.56", features = ["derive"] }
+netlink-packet-core = "0.8.1"
 netlink-packet-route = "0.28.0"
-netlink-sys = "0.8.7"
-nix = { version = "0.31.0", features = ["sched", "process", "fs", "mount", "user"] }
+netlink-sys = "0.8.8"
+nix = { version = "0.31.1", features = ["sched", "process", "fs", "mount", "user"] }
 onion-tunnel = { git = "https://gitlab.torproject.org/tpo/core/onionmasq.git" }
 arti = { version = "2.0.0" , features = ["experimental-api"]}
 sendfd = "0.4.4"
 smoltcp = { git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "39cd44e585aae109f37a2bc9f31376414968456d" }
-tempfile = "3.21.0"
-tokio = { version = "1.47.1", features = ["full"] }
-thiserror = "2.0.16"
-rustls = "0.23.35"
+tempfile = "3.24.0"
+tokio = { version = "1.49.0", features = ["full"] }
+thiserror = "2.0.18"
+rustls = "0.23.36"
 tracing = "0.1.44"
 tracing-subscriber = "0.3.22"
 
