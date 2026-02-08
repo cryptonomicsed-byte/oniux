@@ -18,6 +18,7 @@ use caps::CapSet;
 use clap::Parser;
 use netlink_packet_route::AddressFamily;
 use nix::{
+    errno::Errno,
     libc,
     sched::{self, CloneFlags},
     sys::wait::{self, WaitStatus},
@@ -221,10 +222,6 @@ fn main_main(args: Args) -> Result<ExitCode> {
         bail!("tun kernel module not loaded");
     }
 
-    if !user::usable() {
-        bail!("user namespaces not usable");
-    }
-
     // Create IPC primitives.
     let (parent, child) = UnixDatagram::pair()?;
 
@@ -262,7 +259,12 @@ fn main_main(args: Args) -> Result<ExitCode> {
                 | CloneFlags::CLONE_NEWUSER,
             Some(libc::SIGCHLD),
         )
-    }?;
+    }
+    // TODO: This only proves that we should get rid of anyhow here.
+    .map_err(|e| match e {
+        Errno::EPERM => anyhow!("clone(2) failed with EPERM, no unprivileged userns?"),
+        e => e.into(),
+    })?;
     drop(parent);
 
     // Receive file descriptors.
