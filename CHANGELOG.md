@@ -1,3 +1,9 @@
+# oniux 0.8.1 - 08 February 2026
+
+* Emergency fix for failing unprivileged user namespace clone on mainline
+  Linux systems.
+* Update various dependencies.
+
 # oniux 0.8.0 - 03 February 2026
 
 * Update various dependencies, including Arti 2.0.0.
