@@ -9,9 +9,9 @@ keywords = ["tor", "arti", "privacy", "anonymity"]
 categories = ["command-line-utilities", "cryptography"]
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 caps = "0.5.6"
-clap = { version = "4.5.56", features = ["derive"] }
+clap = { version = "4.5.57", features = ["derive"] }
 netlink-packet-core = "0.8.1"
 netlink-packet-route = "0.28.0"
 netlink-sys = "0.8.8"
