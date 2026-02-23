@@ -13,7 +13,7 @@ anyhow = "1.0.101"
 caps = "0.5.6"
 clap = { version = "4.5.57", features = ["derive"] }
 netlink-packet-core = "0.8.1"
-netlink-packet-route = "0.28.0"
+netlink-packet-route = "0.29.0"
 netlink-sys = "0.8.8"
 nix = { version = "0.31.1", features = ["sched", "process", "fs", "mount", "user"] }
 onion-tunnel = { git = "https://gitlab.torproject.org/tpo/core/onionmasq.git" }
