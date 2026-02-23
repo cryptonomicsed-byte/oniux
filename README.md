@@ -24,6 +24,19 @@ loaded by default in most Linux distributions, but if you get a `File not found`
 error while running *oniux*, you may want to do a `modprobe tun` and run *oniux*
 again.
 
+## Releases
+
+*oniux* releases are made roughly once per month, usually in the days/week
+following the Arti release, which generally happens in the first two weeks
+of a month.
+
+All releases are published as signed git tags in this repository.
+
+The following PGP keys are allowed to sign tags, do not expect all of them
+as signatories:
+* Alexander Færøy [`1C1B C007 A9F6 07AA 8152 C040 BEA7 B180 B149 1921`](https://db.torproject.org/fetchkey.cgi?fingerprint=1C1BC007A9F607AA8152C040BEA7B180B1491921)
+* Clara Engler [`7726 2846 4C6E 8F56 DBB5 ACEC 4CBE 9620 3A1A 78A7`](https://db.torproject.org/fetchkey.cgi?fingerprint=772628464C6E8F56DBB5ACEC4CBE96203A1A78A7)
+
 ## Security
 
 While *oniux* makes it harder for an application to leak than *torsocks*, it
