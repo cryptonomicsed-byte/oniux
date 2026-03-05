@@ -1,3 +1,10 @@
+# oniux 0.9.0 - 05 March 2026
+
+* Update various dependencies, including Arti 2.1.0.
+* Share smoltcp version with onionmasq.
+* Use 1.89 as the MSRV and decide upon an MSRV policy.
+* Document the release process.
+
 # oniux 0.8.1 - 08 February 2026
 
 * Emergency fix for failing unprivileged user namespace clone on mainline
