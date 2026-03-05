@@ -2738,7 +2738,7 @@ dependencies = [
  "onion-tunnel",
  "rustls",
  "sendfd",
- "smoltcp 0.12.0 (git+https://github.com/smoltcp-rs/smoltcp.git?rev=5d4b45f3a2070f0a2901e6d4afe56283da0f5b59)",
+ "smoltcp 0.12.0 (git+https://github.com/smoltcp-rs/smoltcp.git?rev=39cd44e585aae109f37a2bc9f31376414968456d)",
  "tempfile",
  "thiserror 2.0.18",
  "tokio",
@@ -3954,7 +3954,7 @@ dependencies = [
 [[package]]
 name = "smoltcp"
 version = "0.12.0"
-source = "git+https://github.com/smoltcp-rs/smoltcp.git?rev=5d4b45f3a2070f0a2901e6d4afe56283da0f5b59#5d4b45f3a2070f0a2901e6d4afe56283da0f5b59"
+source = "git+https://github.com/smoltcp-rs/smoltcp.git?rev=39cd44e585aae109f37a2bc9f31376414968456d#39cd44e585aae109f37a2bc9f31376414968456d"
 dependencies = [
  "bitflags 1.3.2",
  "byteorder",
