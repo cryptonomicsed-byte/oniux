@@ -30,6 +30,9 @@ again.
 following the Arti release, which generally happens in the first two weeks
 of a month.
 
+The MSRV follows the one of onionmasq, which should follow Arti's.
+Right now, it is at 1.89.
+
 All releases are published as signed git tags in this repository.
 
 The following PGP keys are allowed to sign tags, do not expect all of them
