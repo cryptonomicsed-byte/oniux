@@ -20,10 +20,10 @@ cargo-fmt:
 rust-latest:
   stage: build
   script:
-    - cargo build
+    - cargo build --all-features --all-targets
 
 rust-msrv:
   stage: build
   image: docker.io/amd64/rust:1.89
   script:
-    - cargo build
+    - cargo build --all-features --all-targets
