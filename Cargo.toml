@@ -10,21 +10,21 @@ categories = ["command-line-utilities", "cryptography"]
 rust-version = "1.89"
 
 [dependencies]
-anyhow = "1.0.101"
+anyhow = "1.0.102"
 caps = "0.5.6"
-clap = { version = "4.5.57", features = ["derive"] }
+clap = { version = "4.5.60", features = ["derive"] }
 netlink-packet-core = "0.8.1"
 netlink-packet-route = "0.29.0"
 netlink-sys = "0.8.8"
-nix = { version = "0.31.1", features = ["sched", "process", "fs", "mount", "user"] }
+nix = { version = "0.31.2", features = ["sched", "process", "fs", "mount", "user"] }
 onion-tunnel = { git = "https://gitlab.torproject.org/tpo/core/onionmasq.git" }
-arti = { version = "2.0.0" , features = ["experimental-api"]}
+arti = { version = "2.1.0" , features = ["experimental-api"]}
 sendfd = "0.4.4"
 smoltcp = { git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "39cd44e585aae109f37a2bc9f31376414968456d" }
-tempfile = "3.24.0"
-tokio = { version = "1.49.0", features = ["full"] }
+tempfile = "3.26.0"
+tokio = { version = "1.50.0", features = ["full"] }
 thiserror = "2.0.18"
-rustls = "0.23.36"
+rustls = "0.23.37"
 tracing = "0.1.44"
 tracing-subscriber = "0.3.22"
 
