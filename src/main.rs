@@ -14,6 +14,7 @@ use std::{
 };
 
 use anyhow::{anyhow, bail, Context, Result};
+use arti::proxy::ListenProtocols;
 use caps::CapSet;
 use clap::Parser;
 use netlink_packet_route::AddressFamily;
@@ -193,6 +194,7 @@ fn onion_tunnel(
             tasks.spawn(arti::proxy::run_proxy_with_listeners(
                 tunnel.get_tor_client(),
                 vec![listener],
+                ListenProtocols::SocksOnly,
                 None,
             ));
         }
