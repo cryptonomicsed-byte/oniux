@@ -155,7 +155,7 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
     command.args(&args.cmd[1..]);
     for env_var in IGNORED_ENV_VAR {
         if std::env::var_os(env_var).is_some() {
-            warn!("`{env_var}` was set. it will be ignored inside oniux");
+            warn!("`{env_var}` was set; it will be ignored inside oniux");
             command.env_remove(env_var);
         }
     }
