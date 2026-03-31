@@ -1,3 +1,9 @@
+# oniux 0.10.0 - 31 March 2026
+
+* Update various dependencies, including Arti 2.2.0.
+* Small CI fixes.
+* Small grammar improvements.
+
 # oniux 0.9.0 - 05 March 2026
 
 * Update various dependencies, including Arti 2.1.0.
