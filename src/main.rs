@@ -67,6 +67,10 @@ struct Args {
     /// Log level to use (trace, debug, info, warn, error, off), default error
     #[arg(short = 'l', long, value_name = "LEVEL", default_value_t = LevelFilter::ERROR)]
     log: LevelFilter,
+
+    /// Whether to run inside a private /tmp mount
+    #[arg(long, action = clap::ArgAction::SetTrue, default_value_t = false)]
+    no_private_tmp: bool,
 }
 
 /// Generate an empty stack for calls to `clone(2)`
@@ -78,6 +82,9 @@ fn isolation(parent: UnixDatagram, uid: Uid, gid: Gid, args: &Args) -> Result<Ex
     // Initialize the mount namespace properly.
     mount::init_namespace()?;
     mount::procfs(&PathBuf::from("/proc"))?;
+    if !args.no_private_tmp {
+        mount::tmpfs(&PathBuf::from("/tmp"))?;
+    }
     debug!("finished mount namespace setup");
 
     // Perform UID and GID mappings.

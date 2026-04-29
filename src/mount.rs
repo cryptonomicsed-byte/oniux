@@ -34,6 +34,19 @@ pub fn procfs(path: &Path) -> Result<(), nix::errno::Errno> {
     Ok(())
 }
 
+/// Mounts a new `tmpfs` at `path`
+pub fn tmpfs(path: &Path) -> Result<(), nix::errno::Errno> {
+    mount::mount(
+        Some("tmpfs"),
+        path,
+        Some("tmpfs"),
+        MsFlags::empty(),
+        Some(""),
+    )?;
+    debug!("mounted `tmpfs` at `{:?}`", path);
+    Ok(())
+}
+
 /// Creates a [`MsFlags::MS_BIND`] mount between `src` and `dst`.
 pub fn bind(src: &Path, dst: &Path) -> Result<(), nix::errno::Errno> {
     mount::mount(Some(src), dst, Some(""), MsFlags::MS_BIND, Some(""))?;
