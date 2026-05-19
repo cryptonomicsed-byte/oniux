@@ -2654,7 +2654,7 @@ dependencies = [
  "rand 0.10.0",
  "safelog",
  "simple-proc-net",
- "smoltcp",
+ "smoltcp 0.12.0",
  "static_assertions",
  "thiserror 2.0.18",
  "tokio",
@@ -2675,7 +2675,7 @@ source = "git+https://gitlab.torproject.org/tpo/core/onionmasq.git#3c4f3862cb1d4
 dependencies = [
  "bbqueue",
  "futures",
- "smoltcp",
+ "smoltcp 0.12.0",
  "tokio",
  "tokio-util",
  "tracing",
@@ -2696,7 +2696,7 @@ dependencies = [
  "onion-tunnel",
  "rustls",
  "sendfd",
- "smoltcp",
+ "smoltcp 0.13.1",
  "tempfile",
  "thiserror 2.0.18",
  "tokio",
@@ -3868,6 +3868,22 @@ checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
 name = "smoltcp"
 version = "0.12.0"
 source = "git+https://github.com/smoltcp-rs/smoltcp.git?rev=39cd44e585aae109f37a2bc9f31376414968456d#39cd44e585aae109f37a2bc9f31376414968456d"
+dependencies = [
+ "bitflags 1.3.2",
+ "byteorder",
+ "cfg-if",
+ "defmt 0.3.100",
+ "heapless",
+ "libc",
+ "log",
+ "managed",
+]
+
+[[package]]
+name = "smoltcp"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5f73d40463bba65efc9adc6370b56df76d563cc46e2482bba58351b4afb7535e"
 dependencies = [
  "bitflags 1.3.2",
  "byteorder",
