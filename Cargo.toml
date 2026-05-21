@@ -18,7 +18,7 @@ netlink-packet-route = "0.30.0"
 netlink-sys = "0.8.8"
 nix = { version = "0.31.2", features = ["sched", "process", "fs", "mount", "user"] }
 onion-tunnel = { git = "https://gitlab.torproject.org/tpo/core/onionmasq.git" }
-arti = { version = "2.2.0" , features = ["experimental-api"]}
+arti = { version = "2.3.0" , features = ["experimental-api"]}
 sendfd = "0.4.4"
 smoltcp = { version = "0.13.1" }
 tempfile = "3.27.0"
