@@ -31,7 +31,7 @@ following the Arti release, which generally happens in the first two weeks
 of a month.
 
 The MSRV follows the one of onionmasq, which should follow Arti's.
-Right now, it is at 1.89.
+Right now, it is at 1.91.
 
 All releases are published as signed git tags in this repository.
 
