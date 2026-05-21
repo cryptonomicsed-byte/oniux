@@ -1,3 +1,13 @@
+# oniux 0.11.0 - 21 May 2026
+
+* Update various dependencies, including Arti 2.3.0.
+* Switches to a canonical smoltcp version, 0.13.1 in this case.
+* Set MSRV to 1.91
+* oniux now mounts a private `/tmp` by default.
+    * This might prevent accidential leaks better, as certain processes
+      do IPC through files inside `/tmp`.
+    * Can be disabled using `--no-private-tmp`.
+
 # oniux 0.10.0 - 31 March 2026
 
 * Update various dependencies, including Arti 2.2.0.
