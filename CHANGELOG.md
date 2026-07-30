@@ -1,3 +1,8 @@
+# oniux 0.12.0 - 30 July 2026
+
+* Update various dependencies, including Arti 2.5.0 and onionmasq.
+    * These include bug fixes and security fixes.
+
 # oniux 0.11.0 - 21 May 2026
 
 * Update various dependencies, including Arti 2.3.0.
