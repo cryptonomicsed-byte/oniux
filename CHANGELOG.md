@@ -1,3 +1,8 @@
+# oniux 0.13.0 - 09 September 2026
+
+* Update various dependencies, including Arti 2.6.0 and onionmasq.
+    * This includes the always-on for cgo and congestion control.
+
 # oniux 0.12.0 - 30 July 2026
 
 * Update various dependencies, including Arti 2.5.0 and onionmasq.
