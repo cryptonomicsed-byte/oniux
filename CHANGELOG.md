@@ -1,3 +1,9 @@
+# oniux 0.15.0 - 05 November 2026
+
+* Update various dependencies, including Arti 2.8.0, smoltcp 0.14, and
+  onionmasq.
+    * These releases contain security fixes, updating is recommended.
+
 # oniux 0.14.0 - 21 October 2026
 
 * Update various dependencies, including Arti 2.7.0 and onionmasq.
